@@ -8,6 +8,8 @@
 SRC	=	src/project/main.c\
 		src/project/init_structs.c\
 		src/project/init_interface.c\
+		src/project/grid_actions.c\
+		src/project/calculate_next_gen.c\
 		src/basics/display_help.c\
 		src/basics/my_int_to_str.c\
 		src/basics/my_puterr.c\

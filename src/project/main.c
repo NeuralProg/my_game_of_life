@@ -7,6 +7,15 @@
 
 #include "game_of_life.h"
 
+static void free_all(interface_t *interface, game_t *game)
+{
+    sfRenderWindow_destroy(interface->win->window);
+    free(interface->win);
+    free_grid(&game->grid);
+    free(interface);
+    free(game);
+}
+
 int main(int ac, char const *av[])
 {
     interface_t *interface = malloc(sizeof(interface_t));
@@ -28,6 +37,11 @@ int main(int ac, char const *av[])
             if (interface->win->event.type == sfEvtClosed ||
                         sfKeyboard_isKeyPressed(sfKeyEscape))
                 sfRenderWindow_close(interface->win->window);
+        }
+
+        if (game->playing == 1) {
+            interface->win->time += sfClock_getElapsedTime(interface->win->clock).microseconds / 1000000.0;
+            sfClock_restart(interface->win->clock);
         }
 
         //display_elements(interface, game);
@@ -60,7 +74,11 @@ int main(int ac, char const *av[])
             sfRenderWindow_drawSprite(interface->win->window, interface->button_items[i]->sprite, NULL);
         }
 
+        if (game->playing == 1 && game->last_update + (0.1 + ((100 - game->speed) / 10) * 0.1) <= interface->win->time)
+            calculate_next_gen(interface, game);
+
         sfRenderWindow_display(interface->win->window);
     }
+    free_all(interface, game);
     return 0;
 }

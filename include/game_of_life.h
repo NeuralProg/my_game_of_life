@@ -41,12 +41,17 @@
 typedef struct interface_s interface_t;
 typedef struct game_s game_t;
 
+typedef struct cell_key_s {
+    long int x;
+    long int y;
+} cell_key_t;
+
 typedef struct window_s {
     sfRenderWindow *window;
     sfVideoMode v_mode;
     sfEvent event;
     sfClock *clock;
-    unsigned long int time; // in tenth of secs
+    double time;
 } window_t;
 
 typedef struct sub_menu_s {
@@ -90,7 +95,6 @@ typedef struct interface_s {
 typedef struct active_cell_s {
     long int x;
     long int y;
-    int neighbours;
     UT_hash_handle hh;
 } active_cell_t;
 
@@ -100,7 +104,7 @@ typedef struct game_s {
     unsigned int gen;
     unsigned long int alive;
     int speed;
-    unsigned long int last_update;
+    double last_update;
 } game_t;
 
 
@@ -119,5 +123,15 @@ int my_strlen(char const *str);
 int init_structs(interface_t *interface, game_t *game);
 // Initialisation of the interface
 int initialize_interface(interface_t *interface);
+// If the cell exists in the grid
+int cell_exists(active_cell_t *grid, long int x, long int y);
+// Add or edit a cell to from the grid
+void set_cell(active_cell_t **grid, long int x, long int y);
+// Remove a cell from the grid
+void remove_cell(active_cell_t **grid, long int x, long int y);
+// Free the grid
+void free_grid(active_cell_t **grid);
+// Create the grid for the next generation
+void calculate_next_gen(interface_t *interface, game_t *game);
 
 #endif

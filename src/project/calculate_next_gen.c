@@ -55,8 +55,5 @@ void calculate_next_gen(interface_t *interface, game_t *game)
     free_grid(&game->grid);
     game->grid = new_grid;
     game->gen++;
-    game->alive = HASH_COUNT(game->grid);
     game->last_update = interface->win->time;
-    if (game->alive == 0)
-        game->playing = 0;
 }

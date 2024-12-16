@@ -59,6 +59,8 @@ static void manage_left_click(interface_t *interface, game_t *game)
         }
     }
     if (edited == 0 && game->playing == 0) {
+        if (new_zoom <= 0)
+            new_zoom = 1;
         for (int i = 0; i <= (screen_dim.y - 30) / new_zoom + 30; i++) {
             for (int j = 0; j <= screen_dim.x / new_zoom; j++) {
                 if (mouse_local_pos.x > j * new_zoom &&
@@ -78,12 +80,6 @@ static void manage_left_click(interface_t *interface, game_t *game)
 void manage_events(interface_t *interface, game_t *game)
 {
     while (sfRenderWindow_pollEvent(interface->win->window, &interface->win->event)) {
-        if (interface->win->event.type == sfEvtResized) {
-            if (interface->win->event.size.width < 800 || interface->win->event.size.height < 600) {
-                sfRenderWindow_setSize(interface->win->window, (sfVector2u){800, 600});
-            }
-        }
-
         if (interface->win->event.type == sfEvtClosed ||
                     sfKeyboard_isKeyPressed(sfKeyEscape))
             sfRenderWindow_close(interface->win->window);
@@ -117,6 +113,12 @@ void manage_events(interface_t *interface, game_t *game)
         }
         if (sfKeyboard_isKeyPressed(sfKeyA) && interface->win->event.type == sfEvtKeyPressed) {
             action_speed_down(interface, game);
+        }
+        if (sfKeyboard_isKeyPressed(sfKeyR) && interface->win->event.type == sfEvtKeyPressed) {
+            reset_board(game, interface);
+        }
+        if (sfKeyboard_isKeyPressed(sfKeyF) && interface->win->event.type == sfEvtKeyPressed) {
+            focus_random_cell(game, interface);
         }
     }
 }

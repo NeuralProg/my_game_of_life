@@ -7,9 +7,16 @@
 
 #include "game_of_life.h"
 
+int action_stats(interface_t *interface, game_t *game)
+{
+    game->stats_active = !game->stats_active;
+    return 0;
+}
+
 int action_play(interface_t *interface, game_t *game)
 {
-    game->playing = !game->playing;
+    if (game->alive > 0)
+        game->playing = !game->playing;
     return 0;
 }
 

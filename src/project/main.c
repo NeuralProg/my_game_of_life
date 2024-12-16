@@ -32,7 +32,14 @@ int main(int ac, char const *av[])
     
     while (sfRenderWindow_isOpen(interface->win->window)) {
         sfRenderWindow_clear(interface->win->window, DARK_GREY);
+
+        if (sfRenderWindow_getSize(interface->win->window).x < 800 || sfRenderWindow_getSize(interface->win->window).y < 600) {
+            sfRenderWindow_setSize(interface->win->window, (sfVector2u){800, 600});
+        }
         manage_events(interface, game);
+        game->alive = HASH_COUNT(game->grid);
+        if (game->alive <= 0)
+            game->playing = 0;
         if (game->playing == 1) {
             interface->win->time += sfClock_getElapsedTime(interface->win->clock).microseconds / 1000000.0;
             sfClock_restart(interface->win->clock);
@@ -40,7 +47,7 @@ int main(int ac, char const *av[])
 
         if (game->playing == 1 && game->last_update + (0.1 + ((100 - game->speed) / 10) * 0.1) <= interface->win->time)
             calculate_next_gen(interface, game);
-        display_elements(interface, game);
+        display_elements(interface, game, 0);
 
         sfRenderWindow_display(interface->win->window);
     }

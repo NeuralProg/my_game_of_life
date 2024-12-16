@@ -101,6 +101,7 @@ typedef struct active_cell_s {
 
 typedef struct game_s {
     int playing;
+    int stats_active;
     active_cell_t *grid;
     unsigned int gen;
     unsigned long int alive;
@@ -124,6 +125,12 @@ int my_strlen(char const *str);
 int init_structs(interface_t *interface, game_t *game);
 // Initialisation of the interface
 int initialize_interface(interface_t *interface);
+// Init of a text element
+sfText *init_text(char *txt, sfVector2f pos, int size);
+// Initialisation of the menu items
+int file_subitems(interface_t *interface, int *active_rectsize);
+int display_subitems(interface_t *interface, int *active_rectsize);
+int help_subitems(interface_t *interface, int *active_rectsize);
 // If the cell exists in the grid
 int cell_exists(active_cell_t *grid, long int x, long int y);
 // Get the age of a cell
@@ -139,7 +146,7 @@ void calculate_next_gen(interface_t *interface, game_t *game);
 // Get the number of neighbours of a cell
 int get_neighbours(active_cell_t *grid, long int x, long int y);
 // Display all elements on screen
-void display_elements(interface_t *interface, game_t *game);
+void display_elements(interface_t *interface, game_t *game, int screenshot);
 // Manage all events
 void manage_events(interface_t *interface, game_t *game);
 // Draw texts on screen
@@ -150,8 +157,14 @@ int action_zoom_in(interface_t *interface, game_t *game);
 int action_zoom_out(interface_t *interface, game_t *game);
 int action_speed_up(interface_t *interface, game_t *game);
 int action_speed_down(interface_t *interface, game_t *game);
+int action_stats(interface_t *interface, game_t *game);
 // Submenus actions
 int action_toogle_grid(interface_t *interface, game_t *game);
 int action_toogle_colors(interface_t *interface, game_t *game);
+int action_take_screenshot(interface_t *interface, game_t *game);
+int action_random_map(interface_t *interface, game_t *game);
+// Key actions
+void reset_board(game_t *game, interface_t *interface);
+void focus_random_cell(game_t *game, interface_t *interface);
 
 #endif

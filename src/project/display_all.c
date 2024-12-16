@@ -62,13 +62,10 @@ static void display_backgrounds(interface_t *interface, game_t *game)
     sfRectangleShape_setFillColor(bottom_right_back, sfWhite);
     sfRectangleShape_setPosition(bottom_right_back, (sfVector2f){SCREEN_WIDTH - 180, SCREEN_HEIGHT - 200});
     sfRenderWindow_drawRectangleShape(interface->win->window, bottom_right_back, NULL);
-
     draw_text(interface, zoom_txt, (sfVector2f){SCREEN_WIDTH - 105, SCREEN_HEIGHT - 185}, 20);
     draw_text(interface, speed_txt, (sfVector2f){SCREEN_WIDTH - 105, SCREEN_HEIGHT - 125}, 20);
     free(zoom_nbr);
-    free(zoom_txt);
     free(speed_nbr);
-    free(speed_txt);
 }
 
 static void display_buttons_and_menus(interface_t *interface, game_t *game)
@@ -76,6 +73,7 @@ static void display_buttons_and_menus(interface_t *interface, game_t *game)
     int submenus_size[3] = {4, 3, 1};
 
     interface->button_items[0]->active = game->playing;
+    interface->button_items[5]->active = game->stats_active;
     for (int i = 0; i < 6; i++) {
         if (interface->button_items[i]->active == 0)
             sfSprite_setTexture(interface->button_items[i]->sprite, interface->button_items[i]->inactive_texture, sfTrue);
@@ -94,6 +92,52 @@ static void display_buttons_and_menus(interface_t *interface, game_t *game)
     }
 }
 
+static void display_stats(interface_t *interface, game_t *game)
+{
+    sfRectangleShape *stats_back = sfRectangleShape_create();
+    active_cell_t *current;
+    active_cell_t *tmp;
+    char *gen_nbr = my_int_to_str(game->gen);
+    char *alive_nbr = my_int_to_str(game->alive);
+    char *gen_txt = my_str_concatenate("Gen:   ", gen_nbr);
+    char *alive_txt = my_str_concatenate("Alive:  ", alive_nbr);
+    long int static_cells = 0;
+    char *static_cells_nbr;
+    char *static_cells_txt;
+    char *x_nbr = my_int_to_str(interface->screen_pos[0]);
+    char *y_nbr = my_int_to_str(interface->screen_pos[1]);
+    char *x_txt = my_str_concatenate("X:        ", x_nbr);
+    char *y_txt = my_str_concatenate("Y:        ", y_nbr);
+
+    if (stats_back == NULL || gen_nbr == NULL || alive_nbr == NULL
+        || gen_txt == NULL || alive_txt == NULL || x_nbr == NULL || y_nbr == NULL
+        || x_txt == NULL || y_txt == NULL)
+        return;
+    HASH_ITER(hh, game->grid, current, tmp) {
+        if (current->age >= 20)
+            static_cells++;
+    }
+    static_cells_nbr = my_int_to_str(static_cells);
+    static_cells_txt = my_str_concatenate("Static: ", static_cells_nbr);
+    if (static_cells_nbr == NULL || static_cells_txt == NULL)
+        return;
+    sfRectangleShape_setSize(stats_back, (sfVector2f){160, 200});
+    sfRectangleShape_setFillColor(stats_back, (sfColor){255, 255, 255, 180});
+    sfRectangleShape_setPosition(stats_back, (sfVector2f){40, SCREEN_HEIGHT - 320});
+    sfRenderWindow_drawRectangleShape(interface->win->window, stats_back, NULL);
+    draw_text(interface, gen_txt, (sfVector2f){45, SCREEN_HEIGHT - 305}, 20);
+    draw_text(interface, alive_txt, (sfVector2f){45, SCREEN_HEIGHT - 275}, 20);
+    draw_text(interface, static_cells_txt, (sfVector2f){45, SCREEN_HEIGHT - 245}, 20);
+    draw_text(interface, x_txt, (sfVector2f){45, SCREEN_HEIGHT - 215}, 20);
+    draw_text(interface, y_txt, (sfVector2f){45, SCREEN_HEIGHT - 185}, 20);
+    sfRectangleShape_destroy(stats_back);
+    free(x_nbr);
+    free(y_nbr);
+    free(gen_nbr);
+    free(alive_nbr);
+    free(static_cells_nbr);
+}
+
 static void display_grid(interface_t *interface, game_t *game)
 {
     active_cell_t *current;
@@ -106,6 +150,9 @@ static void display_grid(interface_t *interface, game_t *game)
 
     if (cell == NULL)
         return;
+
+    if (new_zoom <= 0)
+        new_zoom = 1;
 
     // Create and set the view
     sfView *view = sfView_createFromRect((sfFloatRect){0, 0, screen_dim.x, screen_dim.y});
@@ -146,11 +193,21 @@ void draw_text(interface_t *interface, char *str, sfVector2f pos, int size)
     sfText_setPosition(text, pos);
     sfText_setString(text, str);
     sfRenderWindow_drawText(interface->win->window, text, NULL);
+    sfText_destroy(text);
+    sfFont_destroy(font);
+    free(str);
 }
 
-void display_elements(interface_t *interface, game_t *game)
+void display_elements(interface_t *interface, game_t *game, int screenshot)
 {
+    if (screenshot == 1) {
+        display_grid(interface, game);
+        display_stats(interface, game);
+        return;
+    }
     display_grid(interface, game);
     display_backgrounds(interface, game);
+    if (game->stats_active == 1)
+        display_stats(interface, game);
     display_buttons_and_menus(interface, game);
 }

@@ -32,50 +32,15 @@ int main(int ac, char const *av[])
     
     while (sfRenderWindow_isOpen(interface->win->window)) {
         sfRenderWindow_clear(interface->win->window, DARK_GREY);
-
-        while (sfRenderWindow_pollEvent(interface->win->window, &interface->win->event)) {
-            if (interface->win->event.type == sfEvtClosed ||
-                        sfKeyboard_isKeyPressed(sfKeyEscape))
-                sfRenderWindow_close(interface->win->window);
-        }
-
+        manage_events(interface, game);
         if (game->playing == 1) {
             interface->win->time += sfClock_getElapsedTime(interface->win->clock).microseconds / 1000000.0;
             sfClock_restart(interface->win->clock);
         }
 
-        //display_elements(interface, game);
-        sfRenderWindow_drawRectangleShape(interface->win->window, interface->menu_items[0]->inactive_box, NULL);
-        sfRenderWindow_drawText(interface->win->window, interface->menu_items[0]->text, NULL);
-        sfRenderWindow_drawRectangleShape(interface->win->window, interface->menu_items[1]->inactive_box, NULL);
-        sfRenderWindow_drawText(interface->win->window, interface->menu_items[1]->text, NULL);
-        sfRenderWindow_drawRectangleShape(interface->win->window, interface->menu_items[2]->inactive_box, NULL);
-        sfRenderWindow_drawText(interface->win->window, interface->menu_items[2]->text, NULL);
-
-        /*sfRenderWindow_drawRectangleShape(interface->win->window, interface->menu_items[0]->active_box, NULL);
-        sfRenderWindow_drawText(interface->win->window, interface->menu_items[0]->sub_menus[0]->text, NULL);
-        sfRenderWindow_drawText(interface->win->window, interface->menu_items[0]->sub_menus[1]->text, NULL);
-        sfRenderWindow_drawText(interface->win->window, interface->menu_items[0]->sub_menus[2]->text, NULL);
-        sfRenderWindow_drawText(interface->win->window, interface->menu_items[0]->sub_menus[3]->text, NULL);*/
-
-        sfRenderWindow_drawRectangleShape(interface->win->window, interface->menu_items[1]->active_box, NULL);
-        sfRenderWindow_drawText(interface->win->window, interface->menu_items[1]->sub_menus[0]->text, NULL);
-        sfRenderWindow_drawText(interface->win->window, interface->menu_items[1]->sub_menus[1]->text, NULL);
-        sfRenderWindow_drawText(interface->win->window, interface->menu_items[1]->sub_menus[2]->text, NULL);
-
-        /*sfRenderWindow_drawRectangleShape(interface->win->window, interface->menu_items[2]->active_box, NULL);
-        sfRenderWindow_drawText(interface->win->window, interface->menu_items[2]->sub_menus[0]->text, NULL);*/
-
-        for (int i = 0; i < 6; i++) {
-            if (interface->button_items[i]->active == 0)
-                sfSprite_setTexture(interface->button_items[i]->sprite, interface->button_items[i]->inactive_texture, sfTrue);
-            else
-                sfSprite_setTexture(interface->button_items[i]->sprite, interface->button_items[i]->active_texture, sfTrue);
-            sfRenderWindow_drawSprite(interface->win->window, interface->button_items[i]->sprite, NULL);
-        }
-
         if (game->playing == 1 && game->last_update + (0.1 + ((100 - game->speed) / 10) * 0.1) <= interface->win->time)
             calculate_next_gen(interface, game);
+        display_elements(interface, game);
 
         sfRenderWindow_display(interface->win->window);
     }

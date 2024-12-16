@@ -20,7 +20,18 @@ int cell_exists(active_cell_t *grid, long int x, long int y)
     return 1;
 }
 
-void set_cell(active_cell_t **grid, long int x, long int y)
+long int get_cell_age(active_cell_t *grid, long int x, long int y)
+{
+    active_cell_t *cell;
+    cell_key_t full_key = {x, y};
+
+    if (cell_exists(grid, x, y) == 0)
+        return -1;
+    HASH_FIND(hh, grid, &full_key, sizeof(cell_key_t), cell);
+    return cell->age;
+}
+
+void set_cell(active_cell_t **grid, long int x, long int y, long int age)
 {
     active_cell_t *new_cell;
     cell_key_t full_key = {x, y};
@@ -33,6 +44,7 @@ void set_cell(active_cell_t **grid, long int x, long int y)
         return;
     new_cell->x = x;
     new_cell->y = y;
+    new_cell->age = age;
     HASH_ADD(hh, *grid, x, sizeof(long int) * 2, new_cell);
 }
 

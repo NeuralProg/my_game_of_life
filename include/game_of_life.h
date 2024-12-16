@@ -89,12 +89,13 @@ typedef struct interface_s {
     int display_colors;
     int play_sounds;
     int zoom;
-    long int **screen_pos;
+    long int *screen_pos;
 } interface_t;
 
 typedef struct active_cell_s {
     long int x;
     long int y;
+    long int age;
     UT_hash_handle hh;
 } active_cell_t;
 
@@ -125,13 +126,32 @@ int init_structs(interface_t *interface, game_t *game);
 int initialize_interface(interface_t *interface);
 // If the cell exists in the grid
 int cell_exists(active_cell_t *grid, long int x, long int y);
+// Get the age of a cell
+long int get_cell_age(active_cell_t *grid, long int x, long int y);
 // Add or edit a cell to from the grid
-void set_cell(active_cell_t **grid, long int x, long int y);
+void set_cell(active_cell_t **grid, long int x, long int y, long int age);
 // Remove a cell from the grid
 void remove_cell(active_cell_t **grid, long int x, long int y);
 // Free the grid
 void free_grid(active_cell_t **grid);
 // Create the grid for the next generation
 void calculate_next_gen(interface_t *interface, game_t *game);
+// Get the number of neighbours of a cell
+int get_neighbours(active_cell_t *grid, long int x, long int y);
+// Display all elements on screen
+void display_elements(interface_t *interface, game_t *game);
+// Manage all events
+void manage_events(interface_t *interface, game_t *game);
+// Draw texts on screen
+void draw_text(interface_t *interface, char *str, sfVector2f pos, int size);
+// Buttons actions
+int action_play(interface_t *interface, game_t *game);
+int action_zoom_in(interface_t *interface, game_t *game);
+int action_zoom_out(interface_t *interface, game_t *game);
+int action_speed_up(interface_t *interface, game_t *game);
+int action_speed_down(interface_t *interface, game_t *game);
+// Submenus actions
+int action_toogle_grid(interface_t *interface, game_t *game);
+int action_toogle_colors(interface_t *interface, game_t *game);
 
 #endif

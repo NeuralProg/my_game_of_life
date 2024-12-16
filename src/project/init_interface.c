@@ -15,7 +15,7 @@ static window_t *init_window(void)
         return NULL;
     win->v_mode = (sfVideoMode){SCREEN_WIDTH, SCREEN_HEIGHT, 32};
     win->window = sfRenderWindow_create(win->v_mode, "Game of Life",
-                    sfClose, NULL);
+                    sfDefaultStyle, NULL);
     win->clock = sfClock_create();
     win->time = 0;
     return win;
@@ -101,7 +101,8 @@ static int file_subitems(interface_t *interface, int *active_rectsize)
 static int display_subitems(interface_t *interface, int *active_rectsize)
 {
     char *subitems[3] = {"Grid visibility", "Color visibility", "Sound toogle"};
-    int (*actions[3])(interface_t *interface, game_t *game) = {NULL, NULL, NULL}; // TODO: add functions
+    int (*actions[3])(interface_t *interface, game_t *game) =
+            {&action_toogle_grid, &action_toogle_colors, NULL}; // TODO: add functions
     int font_size = 15;
 
     interface->menu_items[1]->sub_menus = malloc(sizeof(sub_menu_t *) * 3);
@@ -187,7 +188,8 @@ static int set_all_button_items(interface_t *interface)
         {SCREEN_WIDTH - 150, SCREEN_HEIGHT - 125}, {45, SCREEN_HEIGHT - 150}};
     sfVector2f dim[6] = {{50, 25}, {25, 25}, {25, 25}, {25, 25}, {25, 25}, {25, 25}};
     int (*actions[6])(interface_t *interface, game_t *game) =
-        {NULL, NULL, NULL, NULL, NULL, NULL}; // TODO: add functions
+        {&action_play, &action_zoom_in, &action_zoom_out, &action_speed_up,
+            &action_speed_down, NULL}; // TODO: add functions
     
     for (int i = 0; i < 6; i++) {
         interface->button_items[i] = malloc(sizeof(button_item_t));
@@ -222,14 +224,14 @@ int initialize_interface(interface_t *interface)
     if (set_all_menu_items(interface) == 84 ||
         set_all_button_items(interface) == 84)
         return 84;
-    interface->display_colors = 0;
+    interface->display_colors = 1;
     interface->display_grid = 1;
     interface->play_sounds = 0;
     interface->screen_pos = malloc(sizeof(long int) * 2);
     if (interface->screen_pos == NULL)
         return 84;
-    interface->screen_pos[0] = 0;
-    interface->screen_pos[1] = 0;
+    interface->screen_pos[0] = 0 - 20;
+    interface->screen_pos[1] = -20;
     interface->zoom = 50;
     return 0;
 }

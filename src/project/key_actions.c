@@ -14,6 +14,7 @@ void reset_board(game_t *game, interface_t *interface)
     game->gen = 0;
     interface->screen_pos[0] = 0;
     interface->screen_pos[1] = 0;
+    game->playing = 0;
 }
 
 void focus_random_cell(game_t *game, interface_t *interface)

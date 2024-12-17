@@ -1,1 +1,24 @@
-Game of life usage
+#########################################################################
+GAME OF LIFE
+
+
+Description:
+    You have a grid on which you can activate cells.
+    As the time will go, the cells from the board will evolve
+    through GENERATIONS following 2 simple rules :
+        - A living cell remains alive if surrounded by 2 or 3 other alive
+            cells, otherwise it dies.
+        - A dead cell becomes alive if surrounded by exactly 3
+            alive cells.
+
+Commands:
+    < ESCAPE key > Quit
+    < LEFT click > Interact with menus and board
+    < ARROW keys > Navigate
+    < SPACE key >  Pause / Unpause
+    < Z & S keys > Zoom control
+    < A & E keys > Speed control
+    < R key >      Reset board
+    < F key >      Focus a random cell
+
+#########################################################################

@@ -16,6 +16,8 @@ SRC	=	src/project/main.c\
 		src/project/submenus_actions.c\
 		src/project/key_actions.c\
 		src/project/init_submenus.c\
+		src/project/trigger_pop_up.c\
+		src/project/is_cell_in_selection_range.c\
 		src/basics/display_help.c\
 		src/basics/my_int_to_str.c\
 		src/basics/my_puterr.c\

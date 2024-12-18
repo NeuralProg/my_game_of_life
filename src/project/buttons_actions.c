@@ -15,8 +15,13 @@ int action_stats(interface_t *interface, game_t *game)
 
 int action_play(interface_t *interface, game_t *game)
 {
-    if (game->alive > 0)
+    if (game->alive > 0) {
         game->playing = !game->playing;
+        if (game->playing == 1)
+            trigger_pop_up(game, interface, "PLAYING");
+        else
+            trigger_pop_up(game, interface, "PAUSED");
+    }
     return 0;
 }
 

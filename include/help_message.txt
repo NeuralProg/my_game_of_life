@@ -3,6 +3,7 @@ GAME OF LIFE
 
 
 Description:
+
     You have a grid on which you can activate cells.
     As the time will go, the cells from the board will evolve
     through GENERATIONS following 2 simple rules :
@@ -11,11 +12,20 @@ Description:
         - A dead cell becomes alive if surrounded by exactly 3
             alive cells.
 
+
 Commands:
+
     < ESCAPE key > Quit
     < LEFT click > Interact with menus and board
+
+    < LEFT click > Long press to create a selection
+    < DELETE key > With an active selection, deletes the content of it
+    < Ctrl + C >   With an active selection, copies the content of it
+    < Ctrl + V >   Pastes a previously copied selection at mouse position
+
     < ARROW keys > Navigate
     < SPACE key >  Pause / Unpause
+
     < Z & S keys > Zoom control
     < A & E keys > Speed control
     < R key >      Reset board

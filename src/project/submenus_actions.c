@@ -10,12 +10,20 @@
 int action_toogle_grid(interface_t *interface, game_t *game)
 {
     interface->display_grid = !interface->display_grid;
+    if (interface->display_grid == 1)
+        trigger_pop_up(game, interface, "Grid Activated.");
+    else
+        trigger_pop_up(game, interface, "Grid Hidden.");
     return 0;
 }
 
 int action_toogle_colors(interface_t *interface, game_t *game)
 {
     interface->display_colors = !interface->display_colors;
+    if (interface->display_colors == 1)
+        trigger_pop_up(game, interface, "Colors Activated.");
+    else 
+        trigger_pop_up(game, interface, "Colors Hidden.");
     return 0;
 }
 
@@ -52,6 +60,7 @@ int action_take_screenshot(interface_t *interface, game_t *game)
         sfTexture_destroy(texture);
         return 84;
     }
+    trigger_pop_up(game, interface, "Screenshot taken.");
     sfImage_saveToFile(image, filename);
     sfImage_destroy(image);
     sfTexture_destroy(texture);
@@ -70,5 +79,6 @@ int action_random_map(interface_t *interface, game_t *game)
         y = random_int(-100, 300);
         set_cell(&game->grid, x, y, 0);
     }
+    trigger_pop_up(game, interface, "Random generation.");
     return 0;
 }

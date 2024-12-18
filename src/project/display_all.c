@@ -11,6 +11,16 @@ static sfColor set_unactive_cell_color(game_t *game, interface_t *interface, lon
 {
     sfColor new_rgb = sfTransparent;
 
+    if ((game->selection->start_pos[0] != game->selection->end_pos[0] ||
+        game->selection->start_pos[1] != game->selection->end_pos[1]) &&
+        is_cell_in_selection_range(game, x, y) == 1) {
+        if (game->playing == 0)
+            new_rgb = (sfColor){0, 145, 255, 200};
+        else
+            new_rgb = (sfColor){255, 230, 150, 200};
+        return new_rgb;
+    }
+
     if (interface->display_colors == 0)
         return new_rgb;
     if (get_neighbours(game->grid, x, y) == 3)
@@ -22,6 +32,16 @@ static sfColor set_active_cell_color(game_t *game, interface_t *interface, long 
 {
     sfColor new_rgb = sfWhite;
     float color_addition = 5;
+
+    if ((game->selection->start_pos[0] != game->selection->end_pos[0] ||
+        game->selection->start_pos[1] != game->selection->end_pos[1]) &&
+        is_cell_in_selection_range(game, x, y) == 1) {
+        if (game->playing == 0)
+            new_rgb = (sfColor){100, 200, 255, 255};
+        else
+            new_rgb = (sfColor){200, 100, 100, 255};
+        return new_rgb;
+    }
 
     if (interface->display_colors == 0)
         return new_rgb;
@@ -66,6 +86,8 @@ static void display_backgrounds(interface_t *interface, game_t *game)
     draw_text(interface, speed_txt, (sfVector2f){SCREEN_WIDTH - 105, SCREEN_HEIGHT - 125}, 20);
     free(zoom_nbr);
     free(speed_nbr);
+    free(zoom_txt);
+    free(speed_txt);
 }
 
 static void display_buttons_and_menus(interface_t *interface, game_t *game)
@@ -136,6 +158,11 @@ static void display_stats(interface_t *interface, game_t *game)
     free(gen_nbr);
     free(alive_nbr);
     free(static_cells_nbr);
+    free(x_txt);
+    free(y_txt);
+    free(gen_txt);
+    free(alive_txt);
+    free(static_cells_txt);
 }
 
 static void display_grid(interface_t *interface, game_t *game)
@@ -195,7 +222,6 @@ void draw_text(interface_t *interface, char *str, sfVector2f pos, int size)
     sfRenderWindow_drawText(interface->win->window, text, NULL);
     sfText_destroy(text);
     sfFont_destroy(font);
-    free(str);
 }
 
 void display_elements(interface_t *interface, game_t *game, int screenshot)
@@ -210,4 +236,9 @@ void display_elements(interface_t *interface, game_t *game, int screenshot)
     if (game->stats_active == 1)
         display_stats(interface, game);
     display_buttons_and_menus(interface, game);
+    if (game->pop_up->active == 1) {
+        sfRenderWindow_drawRectangleShape(interface->win->window, game->pop_up->back, NULL);
+        draw_text(interface, game->pop_up->message,
+            (sfVector2f){game->pop_up->pos.x + 5, game->pop_up->pos.y + 5}, 20);
+    }
 }

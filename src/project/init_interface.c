@@ -21,20 +21,6 @@ static window_t *init_window(void)
     return win;
 }
 
-static sfRectangleShape *init_box(sfVector2f pos, sfVector2f dim, float border)
-{
-    sfRectangleShape *box = sfRectangleShape_create();
-
-    if (box == NULL)
-        return NULL;
-    sfRectangleShape_setPosition(box, pos);
-    sfRectangleShape_setSize(box, dim);
-    sfRectangleShape_setFillColor(box, sfWhite);
-    sfRectangleShape_setOutlineThickness(box, border);
-    sfRectangleShape_setOutlineColor(box, sfBlack);
-    return box;
-}
-
 static menu_item_t *init_menu_item(char *txt, sfVector2f pos, sfVector2f dim,
         sfVector2f dim_sub)
 {
@@ -89,7 +75,7 @@ static int set_all_button_items(interface_t *interface)
     sfVector2f dim[6] = {{50, 25}, {25, 25}, {25, 25}, {25, 25}, {25, 25}, {25, 25}};
     int (*actions[6])(interface_t *interface, game_t *game) =
         {&action_play, &action_zoom_in, &action_zoom_out, &action_speed_up,
-            &action_speed_down, &action_stats}; // TODO: add functions
+            &action_speed_down, &action_stats};
     
     for (int i = 0; i < 6; i++) {
         interface->button_items[i] = malloc(sizeof(button_item_t));
@@ -112,6 +98,20 @@ static int set_all_button_items(interface_t *interface)
         interface->button_items[i]->action = actions[i];
     }
     return 0;
+}
+
+sfRectangleShape *init_box(sfVector2f pos, sfVector2f dim, float border)
+{
+    sfRectangleShape *box = sfRectangleShape_create();
+
+    if (box == NULL)
+        return NULL;
+    sfRectangleShape_setPosition(box, pos);
+    sfRectangleShape_setSize(box, dim);
+    sfRectangleShape_setFillColor(box, sfWhite);
+    sfRectangleShape_setOutlineThickness(box, border);
+    sfRectangleShape_setOutlineColor(box, sfBlack);
+    return box;
 }
 
 sfText *init_text(char *txt, sfVector2f pos, int size)

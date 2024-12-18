@@ -99,10 +99,32 @@ typedef struct active_cell_s {
     UT_hash_handle hh;
 } active_cell_t;
 
+typedef struct pop_up_message_s {
+    int active;
+    char *message;
+    sfVector2f pos;
+    sfVector2f size;
+    sfRectangleShape *back;
+    sfClock *clock;
+    float duration;
+    double timer;
+} pop_up_message_t;
+
+typedef struct selection_s {
+    int active;
+    active_cell_t *selected_cells;
+    long int start_pos[2];
+    long int end_pos[2];
+    long int width;
+    long int height;
+} selection_t;
+
 typedef struct game_s {
     int playing;
     int stats_active;
     active_cell_t *grid;
+    pop_up_message_t *pop_up;
+    selection_t *selection;
     unsigned int gen;
     unsigned long int alive;
     int speed;
@@ -125,8 +147,12 @@ int my_strlen(char const *str);
 int init_structs(interface_t *interface, game_t *game);
 // Initialisation of the interface
 int initialize_interface(interface_t *interface);
+// Get the selection coordinates on the grid (top left to right bottom)
+long int *get_selection_boundaries(game_t *game);
 // Init of a text element
 sfText *init_text(char *txt, sfVector2f pos, int size);
+// Init a box item
+sfRectangleShape *init_box(sfVector2f pos, sfVector2f dim, float border);
 // Initialisation of the menu items
 int file_subitems(interface_t *interface, int *active_rectsize);
 int display_subitems(interface_t *interface, int *active_rectsize);
@@ -143,10 +169,20 @@ void remove_cell(active_cell_t **grid, long int x, long int y);
 void free_grid(active_cell_t **grid);
 // Create the grid for the next generation
 void calculate_next_gen(interface_t *interface, game_t *game);
+// Get the mouse position on the grid
+long int *get_mouse_pos_on_grid(interface_t *interface);
 // Get the number of neighbours of a cell
 int get_neighbours(active_cell_t *grid, long int x, long int y);
 // Display all elements on screen
 void display_elements(interface_t *interface, game_t *game, int screenshot);
+// Is a cell withing the range of the active cell
+int is_cell_in_selection_range(game_t *game, long int x, long int y);
+// Width of the selection
+long int get_selection_width(game_t *game);
+// Height of the selection
+long int get_selection_height(game_t *game);
+// Start a pop_up message
+void trigger_pop_up(game_t *game, interface_t *interface, char *message);
 // Manage all events
 void manage_events(interface_t *interface, game_t *game);
 // Draw texts on screen

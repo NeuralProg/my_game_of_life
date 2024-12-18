@@ -29,7 +29,6 @@ int main(int ac, char const *av[])
         return my_puterr("Invalid arguments\n");
     if (init_structs(interface, game) == 84)
         return 84;
-    
     while (sfRenderWindow_isOpen(interface->win->window)) {
         sfRenderWindow_clear(interface->win->window, DARK_GREY);
 
@@ -44,9 +43,15 @@ int main(int ac, char const *av[])
             interface->win->time += sfClock_getElapsedTime(interface->win->clock).microseconds / 1000000.0;
             sfClock_restart(interface->win->clock);
         }
-
+        if (game->pop_up->active == 1) {
+            game->pop_up->timer -= sfClock_getElapsedTime(game->pop_up->clock).microseconds / 1000000.0;
+            sfClock_restart(game->pop_up->clock);
+        }
         if (game->playing == 1 && game->last_update + (0.1 + ((100 - game->speed) / 10) * 0.1) <= interface->win->time)
             calculate_next_gen(interface, game);
+        if (game->pop_up->active == 1 && game->pop_up->timer <= 0)
+            game->pop_up->active = 0;
+
         display_elements(interface, game, 0);
 
         sfRenderWindow_display(interface->win->window);

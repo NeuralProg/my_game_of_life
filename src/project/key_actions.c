@@ -15,6 +15,7 @@ void reset_board(game_t *game, interface_t *interface)
     interface->screen_pos[0] = 0;
     interface->screen_pos[1] = 0;
     game->playing = 0;
+    trigger_pop_up(game, interface, "Reset done.");
 }
 
 void focus_random_cell(game_t *game, interface_t *interface)
@@ -33,4 +34,5 @@ void focus_random_cell(game_t *game, interface_t *interface)
         }
         x--;
     }
+    trigger_pop_up(game, interface, "Focused :");
 }

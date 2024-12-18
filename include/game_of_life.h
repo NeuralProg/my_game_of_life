@@ -171,6 +171,8 @@ void free_grid(active_cell_t **grid);
 void calculate_next_gen(interface_t *interface, game_t *game);
 // Get the mouse position on the grid
 long int *get_mouse_pos_on_grid(interface_t *interface);
+// Mouse world position
+sfVector2f recalculate_mouse_position(interface_t *interface);
 // Get the number of neighbours of a cell
 int get_neighbours(active_cell_t *grid, long int x, long int y);
 // Display all elements on screen
@@ -202,5 +204,7 @@ int action_random_map(interface_t *interface, game_t *game);
 // Key actions
 void reset_board(game_t *game, interface_t *interface);
 void focus_random_cell(game_t *game, interface_t *interface);
-
+void action_copy_selection(game_t *game, interface_t *interface, long int *selection);
+void action_delete_selection(game_t *game, interface_t *interface, long int *selection);
+void action_paste_selection(game_t *game, interface_t *interface, long int *pos);
 #endif

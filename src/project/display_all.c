@@ -20,7 +20,6 @@ static sfColor set_unactive_cell_color(game_t *game, interface_t *interface, lon
             new_rgb = (sfColor){255, 230, 150, 200};
         return new_rgb;
     }
-
     if (interface->display_colors == 0)
         return new_rgb;
     if (get_neighbours(game->grid, x, y) == 3)
@@ -42,7 +41,6 @@ static sfColor set_active_cell_color(game_t *game, interface_t *interface, long 
             new_rgb = (sfColor){200, 100, 100, 255};
         return new_rgb;
     }
-
     if (interface->display_colors == 0)
         return new_rgb;
     if (get_cell_age(game->grid, x, y) != -1) {
@@ -177,18 +175,15 @@ static void display_grid(interface_t *interface, game_t *game)
 
     if (cell == NULL)
         return;
-
     if (new_zoom <= 0)
         new_zoom = 1;
 
-    // Create and set the view
     sfView *view = sfView_createFromRect((sfFloatRect){0, 0, screen_dim.x, screen_dim.y});
     sfRenderWindow_setView(interface->win->window, view);
 
     sfRectangleShape_setSize(cell, (sfVector2f){new_zoom, new_zoom});
     sfRectangleShape_setOutlineThickness(cell, (float)interface->display_grid / 2);
     sfRectangleShape_setOutlineColor(cell, sfBlack);
-
     for (int i = 0; i <= (screen_dim.y - 30) / new_zoom + 30; i++) {
         for (int j = 0; j <= screen_dim.x / new_zoom; j++) {
             if (cell_exists(game->grid, j + x, i + y) == 1) {
@@ -202,7 +197,6 @@ static void display_grid(interface_t *interface, game_t *game)
     }
     sfRectangleShape_destroy(cell);
 
-    // Reset to the default view
     sfRenderWindow_setView(interface->win->window, sfRenderWindow_getDefaultView(interface->win->window));
     sfView_destroy(view);
 }

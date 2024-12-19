@@ -86,6 +86,8 @@ static void display_backgrounds(interface_t *interface, game_t *game)
     free(speed_nbr);
     free(zoom_txt);
     free(speed_txt);
+    sfRectangleShape_destroy(top_back);
+    sfRectangleShape_destroy(bottom_right_back);
 }
 
 static void display_buttons_and_menus(interface_t *interface, game_t *game)

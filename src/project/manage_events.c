@@ -104,7 +104,7 @@ static void copy_selection(game_t *game, interface_t *interface)
     free(selection);
 }
 
-static void delete_selection(game_t *game, interface_t *interface)
+static void delete_and_cut_selection(game_t *game, interface_t *interface)
 {
     long int *selection = get_selection_boundaries(game);
 
@@ -114,6 +114,11 @@ static void delete_selection(game_t *game, interface_t *interface)
         sfKeyboard_isKeyPressed(sfKeyBackspace) && interface->win->event.type == sfEvtKeyPressed) {
         action_delete_selection(game, interface, selection);
     }
+    if (game->selection->active == 1 &&
+        sfKeyboard_isKeyPressed(sfKeyLControl) && sfKeyboard_isKeyPressed(sfKeyX) &&
+        interface->win->event.type == sfEvtKeyPressed) {
+        action_cut_selection(game, interface, selection);
+    }
     free(selection);
 }
 
@@ -121,20 +126,25 @@ static void paste_selection(game_t *game, interface_t *interface)
 {
     long int *pos = get_mouse_pos_on_grid(interface);
 
-    if (pos[0] == -1 || pos[1] == -1)
+    if (*pos == -1 || pos[0] == -1 || pos[1] == -1) {
+        free(pos);
         return;
+    }
     if (sfKeyboard_isKeyPressed(sfKeyLControl) && sfKeyboard_isKeyPressed(sfKeyV) &&
         interface->win->event.type == sfEvtKeyPressed) {
         action_paste_selection(game, interface, pos);
     }
+    free(pos);
 }
 
 static void handle_mouse_inputs(game_t *game, interface_t *interface)
 {
     long int *mouse_pos = get_mouse_pos_on_grid(interface);
 
-    if (mouse_pos[0] == -1 || mouse_pos[1] == -1)
+    if (*mouse_pos == -1 || mouse_pos[0] == -1 || mouse_pos[1] == -1) {
+        free(mouse_pos);
         return;
+    }
     if (interface->win->event.type == sfEvtMouseButtonPressed &&
         interface->win->event.mouseButton.button == sfMouseLeft) {
         game->selection->start_pos[0] = mouse_pos[0];
@@ -157,11 +167,12 @@ static void handle_mouse_inputs(game_t *game, interface_t *interface)
         game->selection->end_pos[0] = mouse_pos[0];
         game->selection->end_pos[1] = mouse_pos[1];
     }
+    free(mouse_pos);
 }
 
 static void handle_keyboard_inputs(game_t *game, interface_t *interface)
 {
-    delete_selection(game, interface);
+    delete_and_cut_selection(game, interface);
     copy_selection(game, interface);
     paste_selection(game, interface);
     if (sfKeyboard_isKeyPressed(sfKeySpace) && interface->win->event.type == sfEvtKeyPressed)
@@ -174,9 +185,11 @@ static void handle_keyboard_inputs(game_t *game, interface_t *interface)
         interface->screen_pos[0]++;
     if (sfKeyboard_isKeyPressed(sfKeyLeft) && interface->win->event.type == sfEvtKeyPressed)
         interface->screen_pos[0]--;
-    if (sfKeyboard_isKeyPressed(sfKeyZ) && interface->win->event.type == sfEvtKeyPressed)
+    if ((sfKeyboard_isKeyPressed(sfKeyZ) && interface->win->event.type == sfEvtKeyPressed) ||
+        (interface->win->event.mouseWheelScroll.wheel == sfMouseVerticalWheel && interface->win->event.mouseWheelScroll.delta > 0.5))
         action_zoom_in(interface, game);
-    if (sfKeyboard_isKeyPressed(sfKeyS) && interface->win->event.type == sfEvtKeyPressed)
+    if ((sfKeyboard_isKeyPressed(sfKeyS) && interface->win->event.type == sfEvtKeyPressed) ||
+        (interface->win->event.mouseWheelScroll.wheel == sfMouseVerticalWheel && interface->win->event.mouseWheelScroll.delta < -0.5))
         action_zoom_out(interface, game);
     if (sfKeyboard_isKeyPressed(sfKeyE) && interface->win->event.type == sfEvtKeyPressed)
         action_speed_up(interface, game);

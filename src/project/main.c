@@ -7,13 +7,48 @@
 
 #include "game_of_life.h"
 
+static void free_interface(interface_t *interface)
+{
+    int game_submenus[] = {4, 3, 1};
+
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < game_submenus[i]; j++) {
+            sfFont_destroy((sfFont *)sfText_getFont(interface->menu_items[i]->sub_menus[j]->text));
+            sfText_destroy(interface->menu_items[i]->sub_menus[j]->text);
+            free(interface->menu_items[i]->sub_menus[j]);
+        }
+        free(interface->menu_items[i]->sub_menus);
+        sfRectangleShape_destroy(interface->menu_items[i]->active_box);
+        sfRectangleShape_destroy(interface->menu_items[i]->inactive_box);
+        sfFont_destroy((sfFont *)sfText_getFont(interface->menu_items[i]->text));
+        sfText_destroy(interface->menu_items[i]->text);
+        free(interface->menu_items[i]);
+    }
+    free(interface->menu_items);
+    for (int i = 0; i < 6; i++) {
+        if (interface->button_items[i]->active_texture != NULL)
+            sfTexture_destroy(interface->button_items[i]->active_texture);
+        sfTexture_destroy(interface->button_items[i]->inactive_texture);
+        sfSprite_destroy(interface->button_items[i]->sprite);
+        free(interface->button_items[i]);
+    }
+    free(interface->button_items);
+    sfClock_destroy(interface->win->clock);
+    sfRenderWindow_destroy(interface->win->window);
+    free(interface->screen_pos);
+    free(interface->win);
+    free(interface);
+}
+
 static void free_all(interface_t *interface, game_t *game)
 {
-    sfRenderWindow_destroy(interface->win->window);
-    free(interface->win);
+    free(game->selection);
+    sfClock_destroy(game->pop_up->clock);
+    sfRectangleShape_destroy(game->pop_up->back);
+    free(game->pop_up);
     free_grid(&game->grid);
-    free(interface);
     free(game);
+    free_interface(interface);
 }
 
 int main(int ac, char const *av[])

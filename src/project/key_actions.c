@@ -87,3 +87,10 @@ void action_paste_selection(game_t *game, interface_t *interface, long int *pos)
     }
     trigger_pop_up(game, interface, "Pasted selection.");
 }
+
+void action_cut_selection(game_t *game, interface_t *interface, long int *selection)
+{
+    action_copy_selection(game, interface, selection);
+    action_delete_selection(game, interface, selection);
+    trigger_pop_up(game, interface, "Cut selection.");
+}

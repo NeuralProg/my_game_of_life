@@ -207,4 +207,5 @@ void focus_random_cell(game_t *game, interface_t *interface);
 void action_copy_selection(game_t *game, interface_t *interface, long int *selection);
 void action_delete_selection(game_t *game, interface_t *interface, long int *selection);
 void action_paste_selection(game_t *game, interface_t *interface, long int *pos);
+void action_cut_selection(game_t *game, interface_t *interface, long int *selection);
 #endif

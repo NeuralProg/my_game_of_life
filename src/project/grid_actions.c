@@ -65,6 +65,8 @@ void free_grid(active_cell_t **grid)
     active_cell_t *current;
     active_cell_t *tmp;
 
+    if (*grid == NULL)
+        return;
     HASH_ITER(hh, *grid, current, tmp) {
         HASH_DEL(*grid, current);
         free(current);

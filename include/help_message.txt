@@ -21,10 +21,12 @@ Commands:
     < LEFT click > Long press to create a selection
     < DELETE key > With an active selection, deletes the content of it
     < Ctrl + C >   With an active selection, copies the content of it
+    < Ctrl + X >   With an active selection, cuts the content of it
     < Ctrl + V >   Pastes a previously copied selection at mouse position
 
     < ARROW keys > Navigate
     < SPACE key >  Pause / Unpause
+    < Scroll >     Zoom control
 
     < Z & S keys > Zoom control
     < A & E keys > Speed control

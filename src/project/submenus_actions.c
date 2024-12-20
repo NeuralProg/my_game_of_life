@@ -27,6 +27,19 @@ int action_toogle_colors(interface_t *interface, game_t *game)
     return 0;
 }
 
+int action_toogle_sounds(interface_t *interface, game_t *game)
+{
+    if (sfMusic_getStatus(game->sounds->bg_music) == sfPaused ||
+        sfMusic_getStatus(game->sounds->bg_music) == sfStopped) {
+        sfMusic_play(game->sounds->bg_music);
+        trigger_pop_up(game, interface, "Sounds Activated.");
+    } else {
+        sfMusic_pause(game->sounds->bg_music);
+        trigger_pop_up(game, interface, "Sounds Shut.");
+    }
+    return 0;
+}
+
 char *screenshot_name(interface_t *interface)
 {
     time_t t = time(NULL);
@@ -80,5 +93,11 @@ int action_random_map(interface_t *interface, game_t *game)
         set_cell(&game->grid, x, y, 0);
     }
     trigger_pop_up(game, interface, "Random generation.");
+    return 0;
+}
+
+int action_show_help(interface_t *interface, game_t *game)
+{
+    display_help_window(interface);
     return 0;
 }

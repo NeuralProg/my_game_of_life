@@ -39,6 +39,19 @@ static selection_t *init_selection(game_t *game)
     return new_selection;
 }
 
+static sounds_t *init_sounds(game_t *game)
+{
+    sounds_t *new_sounds = malloc(sizeof(sounds_t));
+
+    new_sounds->bg_music = sfMusic_createFromFile(BG_MUSIC);
+    if (new_sounds->bg_music == NULL)
+        return NULL;
+    sfMusic_setLoop(new_sounds->bg_music, 1);
+    sfMusic_setVolume(new_sounds->bg_music, 100);
+    sfMusic_play(new_sounds->bg_music);
+    return new_sounds;
+}
+
 static int init_game(game_t *game)
 {
     game->playing = 0;
@@ -49,6 +62,9 @@ static int init_game(game_t *game)
         return 84;
     game->selection = init_selection(game);
     if (game->selection == NULL)
+        return 84;
+    game->sounds = init_sounds(game);
+    if (game->sounds == NULL)
         return 84;
     game->gen = 0;
     game->alive = 0;

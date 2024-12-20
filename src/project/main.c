@@ -46,6 +46,8 @@ static void free_all(interface_t *interface, game_t *game)
     sfClock_destroy(game->pop_up->clock);
     sfRectangleShape_destroy(game->pop_up->back);
     free(game->pop_up);
+    sfMusic_destroy(game->sounds->bg_music);
+    free(game->sounds);
     free_grid(&game->grid);
     free(game);
     free_interface(interface);

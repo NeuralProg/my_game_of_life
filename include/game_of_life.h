@@ -36,6 +36,7 @@
     #define SPEED_DOWN_S "assets/sprites/speed_down.png"
     #define STATS_ON_S "assets/sprites/stats_on.png"
     #define STATS_OFF_S "assets/sprites/stats_off.png"
+    #define BG_MUSIC "assets/sounds/back_music.mp3"
 
 
 typedef struct interface_s interface_t;
@@ -119,12 +120,17 @@ typedef struct selection_s {
     long int height;
 } selection_t;
 
+typedef struct sounds_s {
+    sfMusic *bg_music;
+} sounds_t;
+
 typedef struct game_s {
     int playing;
     int stats_active;
     active_cell_t *grid;
     pop_up_message_t *pop_up;
     selection_t *selection;
+    sounds_t *sounds;
     unsigned int gen;
     unsigned long int alive;
     int speed;
@@ -189,6 +195,8 @@ void trigger_pop_up(game_t *game, interface_t *interface, char *message);
 void manage_events(interface_t *interface, game_t *game);
 // Draw texts on screen
 void draw_text(interface_t *interface, char *str, sfVector2f pos, int size);
+// draw a help window
+int display_help_window(interface_t *interface);
 // Buttons actions
 int action_play(interface_t *interface, game_t *game);
 int action_zoom_in(interface_t *interface, game_t *game);
@@ -199,8 +207,10 @@ int action_stats(interface_t *interface, game_t *game);
 // Submenus actions
 int action_toogle_grid(interface_t *interface, game_t *game);
 int action_toogle_colors(interface_t *interface, game_t *game);
+int action_toogle_sounds(interface_t *interface, game_t *game);
 int action_take_screenshot(interface_t *interface, game_t *game);
 int action_random_map(interface_t *interface, game_t *game);
+int action_show_help(interface_t *interface, game_t *game);
 // Key actions
 void reset_board(game_t *game, interface_t *interface);
 void focus_random_cell(game_t *game, interface_t *interface);

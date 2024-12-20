@@ -40,7 +40,7 @@ int display_subitems(interface_t *interface, int *active_rectsize)
 {
     char *subitems[3] = {"Grid visibility", "Color visibility", "Sound toogle"};
     int (*actions[3])(interface_t *interface, game_t *game) =
-            {&action_toogle_grid, &action_toogle_colors, NULL}; // TODO: add functions
+            {&action_toogle_grid, &action_toogle_colors, &action_toogle_sounds}; // TODO: add functions
     int font_size = 15;
 
     interface->menu_items[1]->sub_menus = malloc(sizeof(sub_menu_t *) * 3);
@@ -68,7 +68,7 @@ int display_subitems(interface_t *interface, int *active_rectsize)
 int help_subitems(interface_t *interface, int *active_rectsize)
 {
     char *subitems[1] = {"Rules"};
-    int (*actions[1])(interface_t *interface, game_t *game) = {NULL}; // TODO: add functions
+    int (*actions[1])(interface_t *interface, game_t *game) = {&action_show_help}; // TODO: add functions
     int font_size = 15;
 
     interface->menu_items[2]->sub_menus = malloc(sizeof(sub_menu_t *) * 1);

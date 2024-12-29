@@ -7,6 +7,22 @@
 
 #include "game_of_life.h"
 
+char *my_unsigned_int_to_str(unsigned int nb)
+{
+    char *str = malloc(sizeof(char) * (my_int_len(nb) + 1));
+    int i = my_int_len(nb) - 1;
+
+    if (str == NULL)
+        return NULL;
+    str[i + 1] = '\0';
+    while (i >= 0) {
+        str[i] = nb % 10 + '0';
+        nb /= 10;
+        i--;
+    }
+    return str;
+}
+
 char *my_int_to_str(int nb)
 {
     char *str = malloc(sizeof(char) * (my_int_len(nb) + 2));

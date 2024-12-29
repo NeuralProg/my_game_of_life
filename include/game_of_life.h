@@ -12,12 +12,14 @@
 #include <SFML/Config.h>
 #include <math.h>
 #include <time.h>
+#include <sys/stat.h>
 #include <stdlib.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <unistd.h>
 #include <sys/stat.h>
+#include <cjson/cJSON.h>
 #include "uthash.h"
 
 #ifndef GAME_OF_LIFE_H_
@@ -141,6 +143,7 @@ typedef struct game_s {
 // Basics
 int my_puterr(char *str);
 char *my_int_to_str(int nb);
+char *my_unsigned_int_to_str(unsigned int nb);
 char *my_str_concatenate(char *str1, char *str2);
 int random_int(int min, int max);
 // Display usage
@@ -211,6 +214,8 @@ int action_toogle_sounds(interface_t *interface, game_t *game);
 int action_take_screenshot(interface_t *interface, game_t *game);
 int action_random_map(interface_t *interface, game_t *game);
 int action_show_help(interface_t *interface, game_t *game);
+int action_import_file(interface_t *interface, game_t *game);
+int action_export_file(interface_t *interface, game_t *game);
 // Key actions
 void reset_board(game_t *game, interface_t *interface);
 void focus_random_cell(game_t *game, interface_t *interface);

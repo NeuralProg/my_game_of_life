@@ -11,7 +11,8 @@ int file_subitems(interface_t *interface, int *active_rectsize)
 {
     char *subitems[4] = {"Import File", "Export File", "Share as image", "Random map"};
     int (*actions[4])(interface_t *interface, game_t *game) =
-        {NULL, NULL, &action_take_screenshot, &action_random_map}; // TODO: add functions
+        {&action_import_file, &action_export_file, &action_take_screenshot,
+            &action_random_map}; // TODO: add functions
     int font_size = 15;
 
     interface->menu_items[0]->sub_menus = malloc(sizeof(sub_menu_t *) * 4);

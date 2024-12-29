@@ -35,7 +35,9 @@ CSFML_F += -lcsfml-graphics -lcsfml-system -lcsfml-audio -lcsfml-window
 
 MATH_F += -lm
 
-LIBFLAGS += $(CSFML_F) $(MATH_F)
+CJSON_F += -lcjson
+
+LIBFLAGS += $(CSFML_F) $(MATH_F) $(CJSON_F)
 
 CFLAGS += -I include/ -g
 

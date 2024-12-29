@@ -7,6 +7,15 @@
 
 #include "game_of_life.h"
 
+static void merge_grids(active_cell_t **dest, active_cell_t *src)
+{
+    active_cell_t *current = src;
+
+    HASH_ITER(hh, src, current, src) {
+        set_cell(dest, current->x, current->y, current->age);
+    }
+}
+
 static void check_active_cells_next(active_cell_t *grid,
     active_cell_t **new_grid, long int x, long int y)
 {
@@ -49,8 +58,25 @@ void calculate_next_gen(interface_t *interface, game_t *game)
     active_cell_t *current;
     active_cell_t *tmp;
 
-    HASH_ITER(hh, game->grid, current, tmp) {
-        check_active_cells_next(game->grid, &new_grid, current->x, current->y);
+    #pragma omp parallel
+    {
+        #pragma omp single
+        {
+            current = game->grid;
+            while (current != NULL) {
+                tmp = current->hh.next;
+                #pragma omp task firstprivate(current)
+                {
+                    active_cell_t *new_grid_local = NULL;
+                    check_active_cells_next(game->grid, &new_grid_local, current->x, current->y);
+                    #pragma omp critical
+                    {
+                        merge_grids(&new_grid, new_grid_local);
+                    }
+                }
+                current = tmp;
+            }
+        }
     }
     free_grid(&game->grid);
     game->grid = new_grid;

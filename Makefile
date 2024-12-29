@@ -37,7 +37,9 @@ MATH_F += -lm
 
 CJSON_F += -lcjson
 
-LIBFLAGS += $(CSFML_F) $(MATH_F) $(CJSON_F)
+OPENMP_F += -fopenmp
+
+LIBFLAGS += $(CSFML_F) $(MATH_F) $(CJSON_F) $(OPENMP_F)
 
 CFLAGS += -I include/ -g
 

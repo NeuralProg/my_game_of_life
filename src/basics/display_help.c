@@ -42,6 +42,7 @@ int display_help(void)
     while (getline(&line, &len, file) != -1)
         printf("%s", line);
     fclose(file);
+    return 0;
 }
 
 int display_help_window(interface_t *interface)

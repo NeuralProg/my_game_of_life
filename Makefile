@@ -31,22 +31,21 @@ NAME	=	my_game_of_life
 
 OBJ	=	$(SRC:.c=.o)
 
-CSFML_F += -lcsfml-graphics -lcsfml-system -lcsfml-audio -lcsfml-window
-
+CSFML_F += -lcsfml-graphics -lcsfml-system -lcsfml-audio -lcsfml-window		#lib flags
 MATH_F += -lm
-
 CJSON_F += -lcjson
-
 OPENMP_F += -fopenmp
 
 LIBFLAGS += $(CSFML_F) $(MATH_F) $(CJSON_F) $(OPENMP_F)
 
-CFLAGS += -I include/ -g
+CFLAGS += -I include/ -I/usr/local/include
 
 all:	$(NAME)									#all rule
 
-$(NAME): $(OBJ)
+$(NAME): $(OBJ)										#build rule
 	gcc $(CFLAGS) -o $(NAME) $(SRC) $(LIBFLAGS)
+mac_build: $(OBJ)									#build rule for Mac (gcc version 14)
+	gcc-14 $(CFLAGS) -o $(NAME) $(SRC) $(LIBFLAGS)
 
 clean:											#clean rule
 	rm -f *.o
@@ -57,3 +56,4 @@ fclean:		clean								#fclean rule
 	rm -f $(NAME)
 
 re:	fclean $(NAME)								#re rule
+re_mac: fclean mac_build						#re rule for Mac (gcc version 14)

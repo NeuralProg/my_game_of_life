@@ -39,7 +39,7 @@ int file_subitems(interface_t *interface, int *active_rectsize)
 
 int display_subitems(interface_t *interface, int *active_rectsize)
 {
-    char *subitems[3] = {"Grid visibility", "Color visibility", "Sound toogle"};
+    char *subitems[3] = {"Grid visibility", "Color visibility", "Toogle sound"};
     int (*actions[3])(interface_t *interface, game_t *game) =
             {&action_toogle_grid, &action_toogle_colors, &action_toogle_sounds}; // TODO: add functions
     int font_size = 15;
